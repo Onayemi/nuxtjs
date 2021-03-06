@@ -1,0 +1,135 @@
+let css be in assets/css
+let javascript be in static/js
+
+set target: 'static', on top of nuxt.config.js for access image and js file
+
+link:[
+  { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+],
+script: [
+ {scr: "/vendor/jquery/jquery.min.js"},
+ {scr: "" },
+]
+
+
+
+--------
+css: [
+  '@/assets/vendor/abc.css',
+  '@/assets/vendor/def.css'
+]
+
+axios:{
+  baseURL: 'http.....'
+},
+router: {
+  middleware: ['auth']
+},
+
+yarn dev
+yarn generate
+yarn build
+
+cd dist
+yarn start
+
+yarn add @nuxtjs/auth @nuxtjs/axios
+npm install @nuxtjs/auth @nuxtjs/axios
+
+auth.nuxtjs.org/
+auth.nuxtjs.org/guide/middleware.html
+
+startbootstrap.com/themes/sd-admin-2/
+https://reqres.in   free api endpoint
+
+/api/login
+
+{
+    "email": "eve.holt@reqres.in",
+    "password": "cityslicka"
+}
+
+Request
+/api/users?page=2
+
+yarn add @nuxtjs/dotenv
+yarn add --save vue-notification
+yarn add @nuxtjs/auth
+
+yarn remove vue-notifications
+
+v-currency cdn
+
+1. ====== DOTENV SETUP =========
+npm i @nuxtjs/dotenv
+--- register it ----
+require('dotenv').config();
+
+buildModules: [
+'@nuxtjs/dotenv'
+]
+
+create .env in root folder
+e.g. API_KEY=hhsajfhfljkjfk  etc
+Access it
+${process.env.API_KEY} in anywhere to access
+
+gitignore add this .env
+
+2. ==== VUE-NOTIFICATION ====
+npm i --save vue-notification
+create file notification.js in plugins directory
+
+--- add the code in notification.js ----
+import Vue from 'vue'
+import Notifications from 'vue-notification'
+Vue.use(Notification)
+
+export default(context, inject) => {
+  inject('notify', vue-notify)
+}
+-----Register it -----
+ plugins: [
+    '~/plugins/notification.js'
+  ]
+------Add it anywhere in page --------
+this.$notify({group: 'all', text: 'Hey !!!!!'})
+
+3. ==== Guest middleware =====
+create file in middlwware directory guest.js
+copy the code
+
+export default function({store, redirect}){
+    if(store.state.auth.loggedIn){
+        return redirect('/auth')
+    }
+}
+
+In the page add middleware: 'guest'
+But middleware: 'auth' is when the user login
+
+4. ====== Deploy =======
+The following are folder to add to online
+.nuxt, static, .env, nuxt.config.js, package.json, README.md, yarn.lock
+node_modules confirm first from chris
+
+From Chris upload only .nuxt folder to cpanel
+
+5. ======== Fontawesome =========
+yarn add @nuxtjs/fontawesome @fontawesome/free-solid-svg-icons @fontawesome/free-brands-svg-icons -D
+yarn add @fontawesome/fontawesome-svg-core
+
+Register it in nuxt.config.js
+buildModules: [
+  '@nuxtjs/fontawesome'
+],
+fontawesome: {
+  component: 'fa',
+  icons: [
+    solid: true,  // solid: ['faEnvelope', 'faLock'],
+    brands: true // []
+  ]
+}
+
+In vue page
+<fa icon="envelope" />
