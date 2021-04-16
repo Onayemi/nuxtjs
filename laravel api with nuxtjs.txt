@@ -1,0 +1,64 @@
+auth: {
+    redirect: {
+      login: '/'
+    },
+    strategies: {
+      'laravelJWT': {
+          provider: 'laravel/jwt',
+          url: '<laravel url>',
+        endpoints:{
+          login: {url:'/login', method: 'post', propertyName: 'access_token'}, //access_token  , propertyName: 'access_token'
+          logout: {url:'/logout', method: 'post'},
+          user: {url:'/me', method: 'get', propertyName: 'data'}, //'data'
+        },
+        token: {
+           property: 'access_token',
+           maxAge: 60 * 60
+        },
+        refreshToken: {
+          maxAge: 20160 * 60
+        },
+      },
+    }
+  }
+
+
+  proxy to avoid cors
+  {
+      axios: {
+          proxy: true
+      },
+      proxy: {
+          '/laravel' : {
+              target: 'https://laravel-auth.nuxtjs.app',
+              pathRewrite: { '^/laravel': '/' }
+          }
+      },
+      auth: {
+          strategies: {
+              'laravelJWT': {
+                  url: '<laravel url>'
+              }
+          }
+      }
+  }
+
+  anywhere in application
+  this.$auth.loginWith('laravelJWT', {
+      data: {
+          email: '__email__',
+          passord: '__password__'
+      }
+  })
+
+
+  Route in laravel
+    Route::group([
+        'middleware' => ['api', 'auth:api']
+    ], function($router){
+        Route::post('login', 'AuthController@login')->withoutMiddleware(['auth:api']);
+        Route::post('register', 'AuthController@register');
+        Route::post('logout', 'AuthController@logout');
+        Route::get('me', 'AuthController@profile');
+        Route::post('refresh', 'AuthController@refresh')->withoutMiddleware(['auth:api']);    
+    });

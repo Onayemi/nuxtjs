@@ -1,0 +1,13 @@
+Install Nuxt
+Setup bootstrap
+create axios.js file in plugins/axios.js and configure it on nuxt.config.js
+setup proxy and env in nuxt.config.js
+create middleware auth.js file
+create your login methods don't use $auth.loginWith methods
+setup baseUrl in nuxt.config.js
+
+setup vuex-persistence for storing token localstorage and other thing
+
+
+node to communicate with your server
+

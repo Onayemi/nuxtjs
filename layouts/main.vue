@@ -90,10 +90,17 @@
 // import Banner from '@/components/layout/banner'
 import Nav from '@/components/layout/nav'
 export default {
+    name: 'Main',
     components: {
         // 'app-banner': Banner,
         'app-nav': Nav
-    }
+    },
+
+    // updated: function() {
+    //     $(document).ready(function () {
+            
+    //     });
+    // },
 }
 </script>
 

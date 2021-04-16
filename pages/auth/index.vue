@@ -2,10 +2,14 @@
   <div>
       <form method="post" @submit.prevent="loginUser">
           <!-- loginUser -->
+            <div v-if="errors" class="alert alert-danger" role="alert">
+                {{ errors }}
+            </div>
             <div class="form-group first">
-            <label for="username">Email</label>
-            <input type="text" v-model="email" class="form-control" id="email">
-
+                <label for="username">Email</label>
+                <input type="text" v-model="email" class="form-control" id="email">
+                <!-- <input type="text" v-model="email" class="form-control" :class="{'is_invalid': errors.email}" id="email"> -->
+                <!-- <p class="text-danger" v-if="errors"> {{errors.email[0] }}</p> -->
             </div>
             <div class="form-group last mb-4">
             <label for="password">Password</label>
@@ -44,22 +48,27 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { mapActions } from 'vuex' //mapGetters
 export default {
-    middleware: 'guest',
+    name: 'auth',
+    // middleware: 'guest',
     layout: 'login',
     data(){
         return {
-            // auth: {
-            email: 'eve.holt@reqres.in',
-            password: 'cityslicka',
+            // data: {
+                email: 'onayemi18@gmail.com',
+                password: 'light80',
+            // },
 
             loginTesting: {
                 login_Details:{
                     email: 'eve.holt@reqres.in',
                     password: 'cityslicka'
                 }
-            }
+            },
+            errors: '',
+            message: ''
             // }
         }
     },
@@ -67,26 +76,29 @@ export default {
         title: 'Login Pages'
     },
     mounted(){
-        // console.log(this.$auth.loggedIn)
-        if(this.$auth.loggedIn === true){
-            this.$router.push('/dashboard')
-        }
-        // this.$router.push('/auth')
+        // console.log(this.$auth.$storage._state)
+        // console.log(this.$nuxt.$auth.getToken('local'))
+        // if(this.$auth.loggedIn === true){
+        //     this.$router.push('/dashboard/home')
+        // }
     },
     // computed: {
-    //     ...mapGetters({
-    //         users: 'user/getUsers',
-    //         total: 'user/getTotal'
-    //     })
+    //     // ...mapGetters({
+    //     //     users: 'user/getUsers',
+    //     //     total: 'user/getTotal'
+    //     // })
+    //     // ...mapState('user', {
+    //     //     errors: state => state.errors
+    //     // })
     // },
+    created(){
+
+    },
+
     methods: {
-        ...mapActions('user', ['postUserData','loadDataById']),
+        // ...mapActions('user', ['postUserData','loadDataById']),
+        // ...mapActions(['doLogin']),
         async signUp(){
-            console.log('User email', this.email)
-            // this.$notify({
-            //     title: 'Important message',
-            //     text: 'Hello user!'
-            // });
             this.postUserData({ email: this.email, password: this.password }).then(() =>{
                 console.log('User email', this.email)
             }).catch((error) =>{
@@ -94,28 +106,30 @@ export default {
             })
         },
 
-        async getUserId(id){
-            this.postUserData(id).then(() =>{
+        // async getUserId(id){
+        //     this.postUserData(id).then(() =>{
 
-                console.log(response)
-            }).catch((error) =>{
-                console.log(error)
-            })
-        },
+        //         console.log(response)
+        //     }).catch((error) =>{
+        //         console.log(error)
+        //     })
+        // },
 
         async loginUser(){
-            try {
-                const response = await this.$auth.loginWith('local', {
-                    data: { email: this.email, password: this.password }
-                })
-                console.log(response)
-                this.$router.push('/dashboard')
-                // if(response.data.loggedIn === true){
-                //     this.$router.replace({ name: 'dashboard'})                
-                // }
-            } catch (err) {
-                console.log(err)
-            }
+            await this.$axios.post('login', {
+                email: this.email,
+                password: this.password
+            }).then((response) =>{
+                if(response){
+                    this.$store.commit('SET_TOKEN', response.data.access_token)
+                    this.$store.commit('SET_USER', JSON.stringify(response.data.data)) //JSON.stringify(obj)
+                    this.$router.push('/dashboard/home');
+                }
+                this.errors = ''
+            }).catch((error) =>{
+                console.log(error);
+                this.errors = 'Invalid Username/Password!'
+            })
         }
     }
     

@@ -2,7 +2,8 @@ export const state = () =>({
     users: [],
     errors: [],
     authUser: false,
-    api_token: null
+    // api_token: null
+    // access_token: null
 })
 
 export const mutations = {
@@ -12,42 +13,40 @@ export const mutations = {
     SET_AUTH_USER(state, payload){
         state.authUser = payload
     },
-    SET_API_TOKEN(state, payload){
-        state.api_token = payload
-    },
+    // SET_API_TOKEN(state, payload){
+    //     state.access_token = payload
+    //     // state.api_token = payload
+    // },
     SET_ERRORS(state, payload){
         state.errors = payload
     }
 }
 
 export const actions = {
-    NuxtServerInit({commit}, context){
-        commit('SET_USER_DATA', context.app.$auth.user)
-        if(context.app.$auth.$state.loggedIn){
-            commit('SET_API_TOKEN', context.app.$auth.$state.user.api_token)
-        }
-        // console.log(context.app.$auth.$state.user)
+    NuxtServerInit({dispatch}, context){
+        // console.log(context.app.$auth.$state.data)
+        dispatch('getUser')
     },
+    
 
     getUserData({commit}){
         return new Promise((resolve, reject) =>{
-            this.$axios.get('/users').then((response) =>{
-                // console.log(response.data.data)
-                commit('SET_USER_DATA', response.data.data)
+            this.$axios.get('/me').then((response) =>{
+                commit('SET_USER_DATA', response.data)
                 resolve()
             })
         })
     },
 
-    async postUserData({commit}, payload){
-        console.log(payload)
-        // let { data } = await this.$axios.post('/users', payload);
-        // return data;
-    },
-
     // Load all user data
     async loadData({commit}){
         let { data } = await this.$axios.post('/users', payload);
+        return data;
+    },
+
+    // Load all user data
+    async getUser({commit}){
+        let { data } = await this.$axios.get('/me');
         return data;
     },
 
@@ -68,6 +67,7 @@ export const actions = {
     //         })
     //     })
     // },
+
     storeUserData({dispatch, commit}, payload){
         return new Promise((resolve, reject) =>{
             this.$axios.post('/users', payload)
@@ -83,10 +83,16 @@ export const actions = {
 }
 
 export const getters = {
-    getUsers(state){
+    isAuthenticated(state){
         return state.users
     },
-    getTotal(state){
-        return state.users.length
-    }
+    // loggedInUser(state){
+    //     return state.auth.data
+    // },
+    // getUsers(state){
+    //     return state.users
+    // },
+    // getTotal(state){
+    //     return state.users.length
+    // }
 }

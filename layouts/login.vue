@@ -11,7 +11,6 @@
             <div class="col-md-8">
               <div class="mb-4">
               <h3>Sign In to <strong>Remlex</strong></h3>
-              <!-- <p class="mb-4">Lorem ipsum dolor sit amet elit. Sapiente sit aut eos consectetur adipisicing.</p> -->
             </div>
             
                 <Nuxt />

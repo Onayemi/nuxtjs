@@ -1,4 +1,9 @@
-export default function({ $axios, store}){
-    $axios.setHeader('Content-Type', 'application/json');
-    $axios.setToken(store.state.api_token, 'Bearer')
+export default function({ $axios, store, redirect}){
+    $axios.onRequest((config) => {
+        let token = store.state.token
+        if(token) { 
+            config.headers.common['Authorization'] = `Bearer ${token}`
+        }
+        return config
+    })
 }

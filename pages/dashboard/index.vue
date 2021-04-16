@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <app-nav></app-nav> -->
     <!-- ======= Breadcrumbs ======= -->
     <section id="breadcrumbs" class="breadcrumbs">
         <div class="container">
@@ -20,11 +21,9 @@
         <!-- <p v-for="data in getUserData" :key="data.id">{{ data.avatar}}</p> -->
         <!-- <h1>Welcome {{ users.first_name}},</h1> -->
         <p v-for="user in users" :key="user.id">
-            Welcome: {{ user.first_name}}<br/>
+            Welcome: {{ user.name}}<br/>
             Email: {{ user.email}}<br/>
-            First name: {{ user.email}}<br/>
-            Last name: {{ user.email}}<br/>
-            Avatar url: {{ user.avatar}}<br/>
+            Customer name: {{ user.name}}<br/>
         </p>
         <!-- {{ users }} -->
     </div>
@@ -33,24 +32,30 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+// import Nav from '@/components/layout/nav'
     export default {
-        layout: 'main',
-        middleware: 'auth',
-        async asyncData({ store }){
-            await Promise.all([
-                store.dispatch('user/getUserData')
-            ])
-            return
-        },
+        name: 'Dashboard',
+        // components: {
+        //     'app-nav': Nav
+        // },
+        // layout: 'main',
+        // middleware: 'auth',
+        // async asyncData({ store }){
+        //     await Promise.all([
+        //         store.dispatch('user/getUserData')
+        //     ])
+        //     return
+        // },
         computed: {
-            // ...mapState('user', {
-            //     users: state => state.users
-            // })
+            ...mapState('user', {
+                users: state => state.users
+            })
 
         },
         mounted(){
             // console.log(users)
             // this.getUserData();
+            // console.log(this.$nuxt.$auth.getToken('local'))
         },
         methods:{
             // ...mapActions('user', ['getUserDataById']), //, 'storeUserData'
@@ -59,8 +64,10 @@ import { mapState, mapActions } from 'vuex'
                 // this.getUserDataById()
             //     // console.log('testing')
             },
+            
             logout(){
-                this.$auth.logout();
+                this.$store.commit('SET_TOKEN') == null;
+                this.$store.commit('SET_USER') == null;
                 this.$router.push('/auth')
             }
         }

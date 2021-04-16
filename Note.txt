@@ -12,6 +12,8 @@ script: [
 ]
 
 
+npm install --save jquery popper.js
+yarn add jquery popper.js
 
 --------
 css: [
@@ -73,6 +75,9 @@ create .env in root folder
 e.g. API_KEY=hhsajfhfljkjfk  etc
 Access it
 ${process.env.API_KEY} in anywhere to access
+
+
+https://github.com/Onayemi/nuxtjs.git
 
 gitignore add this .env
 
