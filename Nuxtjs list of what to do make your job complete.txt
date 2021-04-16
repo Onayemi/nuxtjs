@@ -11,3 +11,10 @@ setup vuex-persistence for storing token localstorage and other thing
 
 node to communicate with your server
 
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Onayemi/nuxt-project-first.git
+git push -u origin main
+
